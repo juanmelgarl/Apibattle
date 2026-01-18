@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace WebApplication14.Models;
+
+public partial class Location
+{
+    public int Id { get; set; }
+
+    public int? KingdomId { get; set; }
+
+    public string Location1 { get; set; } = null!;
+
+    public string? Url { get; set; }
+
+    public string? Summary { get; set; }
+
+    public string? Name { get; set; }
+
+    public virtual ICollection<Death> Deaths { get; set; } = new List<Death>();
+
+    public virtual Kingdom? Kingdom { get; set; }
+}
