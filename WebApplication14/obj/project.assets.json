@@ -3764,11 +3764,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\juanm\\source\\repos\\WebApplication14\\WebApplication14\\WebApplication14.csproj",
+      "projectUniqueName": "C:\\Users\\juanm\\source\\repos\\ApiBattle\\WebApplication14\\WebApplication14.csproj",
       "projectName": "WebApplication14",
-      "projectPath": "C:\\Users\\juanm\\source\\repos\\WebApplication14\\WebApplication14\\WebApplication14.csproj",
+      "projectPath": "C:\\Users\\juanm\\source\\repos\\ApiBattle\\WebApplication14\\WebApplication14.csproj",
       "packagesPath": "C:\\Users\\juanm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\juanm\\source\\repos\\WebApplication14\\WebApplication14\\obj\\",
+      "outputPath": "C:\\Users\\juanm\\source\\repos\\ApiBattle\\WebApplication14\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
