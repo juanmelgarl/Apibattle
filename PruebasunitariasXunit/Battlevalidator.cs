@@ -6,11 +6,11 @@ using WebApplication14.Validations;
 namespace PruebasunitariasXunit
 
 {
-    public class UnitTest1
+    public class Battlevalidator
     {
         private readonly CreateBattleValidator _validator;
 
-        public UnitTest1()
+        public Battlevalidator()
         {
              _validator = new CreateBattleValidator();
         }
