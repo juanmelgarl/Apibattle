@@ -1,4 +1,25 @@
+## Build results
+bin/
+obj/
+
+## Visual Studio
 .vs/
-[Bb]in/
-[Obj]/
 *.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## .NET
+*.cache
+*.g.cs
+*.AssemblyInfo.cs
+project.assets.json
+project.nuget.cache
+*.deps.json
+*.runtimeconfig.json
+
+## NuGet
+.nuget/
+
+## Logs
+*.log
