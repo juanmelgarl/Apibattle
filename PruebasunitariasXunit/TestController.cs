@@ -1,100 +1,110 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebApplication14.Command;
-using WebApplication14.Query;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using WebApplication14.Command;
 using WebApplication14.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
 using WebApplication14.DTOS.Reques;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using WebApplication14.DTOS.Response;
+using WebApplication14.Query;
+using WebApplication14.Repository;
 
 namespace PruebasunitariasXunit
 {
     public class TestController
     {
-        private readonly Mock<BattleQuery> _Query;
-        private readonly Mock<BattleCommand> _COMMAND;
-        private readonly BattleController _Controller;
+        private readonly Mock<IBattleQuery> _query;
+        private readonly Mock<IbattleCommand> _command;
+        private readonly BattleController _controller;
 
         public TestController()
         {
-             _Query = new Mock<BattleQuery>();
-            _COMMAND  = new Mock <BattleCommand>();
-            _Controller = new BattleController(_COMMAND.Object, _Query.Object);
+            _query = new Mock<IBattleQuery>();
+            _command = new Mock<IbattleCommand>();
+            _controller = new BattleController(_command.Object, _query.Object);
         }
+
+
         [Fact]
         public async Task CrearBattlenull()
         {
-            var result = await _Controller.Create(null);
-             Assert.IsType<BadRequestResult>(result);
+            var result = await _controller.Create(null);
+
+            Assert.IsType<BadRequestResult>(result);
         }
+
         [Fact]
         public async Task CrearDtovalido()
         {
-            var dto = new CreateBattleRequest { AmountAttackerSoldiers = 1400, AmountDefenderSoldiers = 2000, AttackerWon = false,  HasMayorCapture = true, HasMayorDeath = true, Name = "el guerrero de dios", Notes = "no se", Year = 1500};
-            _COMMAND.Setup(c => c.CrearAsync(dto));
-            var result = await _COMMAND.Object.CrearAsync(dto); 
-            Assert.IsType<OkResult>(result);
+            var dto = new CreateBattleRequest
+            {
+                AmountAttackerSoldiers = 1400,
+                AmountDefenderSoldiers = 2000,
+                AttackerWon = false,
+                HasMayorCapture = true,
+                HasMayorDeath = true,
+                Name = "el guerrero de dios",
+                Notes = "no se",
+                Year = 1500
+            };
+
+            _command.Setup(c => c.CrearAsync(It.IsAny<CreateBattleRequest>()))
+                .ReturnsAsync(new Battlereponse
+                {
+                    Id = 3,
+                    Name = "juan"
+                });
+
+            var result = await _controller.Create(dto);
+
+            var ok = Assert.IsType<OkObjectResult>(result);
+            Assert.IsType<Battlereponse>(ok.Value);
         }
+
+
         [Fact]
         public async Task ObtenerIdInvalido()
         {
-            var result = await _Query.Object.GetById(0);
-            Assert.IsType<BadRequestObjectResult>(result);
+            var result = await _controller.Getporid(0);
+
+            Assert.IsType<BadRequestResult>(result.Result);
         }
+
         [Fact]
         public async Task ObtenerIDvalido()
         {
-            _Query.Setup(q => q.GetById(10))
-                .ReturnsAsync(new WebApplication14.DTOS.Response.Battlereponse
+            _query.Setup(q => q.GetById(10))
+                .ReturnsAsync(new Battlereponse
                 {
-                    Id = 12,
-                    AmountAttackerSoldiers = 1233,
-                    AmountDefenderSoldiers = 2321,
-                    AttackerWon = true,
-                    BattleTypeId = 30,
-                    HasMayorCapture = false,
-                    HasMayorDeath = true,
-                    LocationId = 33,
-                    Name = "no se",
-                    Notes = "o",
-                    Year = 3400,
+                    Id = 10,
+                    Name = "batalla"
                 });
-            var result = await _Query.Object.GetById(10);
-          var type =  Assert.IsType<OkResult>(result);
-           Assert.NotNull(type);
-            
-    }
+
+            var result = await _controller.Getporid(10);
+
+            var ok = Assert.IsType<OkObjectResult>(result.Result); 
+            Assert.IsType<Battlereponse>(ok.Value);
+        }
+
         [Fact]
         public async Task ActualizarInvalido()
         {
-            _COMMAND.Setup(q => q.UpdateAsync(1, It.IsAny<UpdateBattle>()))
+            _command.Setup(c => c.UpdateAsync(1, It.IsAny<UpdateBattle>()))
                 .ReturnsAsync(false);
-            var result = await _COMMAND.Object.UpdateAsync(1,new UpdateBattle());
-            Assert.False(result);
-            Assert.IsType<NotFoundObjectResult>(result);  
-         
+
+            var result = await _controller.Update(1, new UpdateBattle());
+
+            Assert.IsType<NotFoundResult>(result);
         }
-        [Fact]
-        public async Task EliminarIDinvalido()
-        {
-            var result = await _Query.Object.GetById(0);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
+
+
         [Fact]
         public async Task EliminarBattleInvalido()
         {
-            _COMMAND.Setup(q => q.DeleteAsync(0))
+            _command.Setup(c => c.DeleteAsync(1))
                 .ReturnsAsync(false);
-            var result = _COMMAND.Object.DeleteAsync(0);
-            Assert.IsType<NotFoundObjectResult>(result.Result);
 
-        }
+            var result = await _controller.Delete(1);
 
+            Assert.IsType<NotFoundResult>(result);
         }
     }
-
+}

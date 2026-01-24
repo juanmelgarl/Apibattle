@@ -42,17 +42,15 @@ namespace WebApplication14.Controllers
             {
                 return BadRequest();
             }
-            try
-            {
+     
                 var result = await _Query.GetById(id);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message); throw;
+            if (result == null)
+                return NotFound("No existe la batalla");
+
+            return Ok(result);
 
 
-            }
+
         }
         [HttpGet("filtrar")]
         public async Task<ActionResult<List<Battlereponse>>> Filtrar([FromQuery] string nombre, [FromQuery] PaginationRequest pagination)
@@ -110,17 +108,10 @@ namespace WebApplication14.Controllers
             {
                 return BadRequest();
             }
-            try
-            {
+           
                 var Create = await _Command.CrearAsync(dto);
                 return Ok(Create);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-                throw;
-
-            }
+          
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateBattle dto)
@@ -133,34 +124,28 @@ namespace WebApplication14.Controllers
             {
                 return BadRequest();
             }
-            try
-            {
+          
                 var result = await _Command.UpdateAsync(id, dto);
-                return Ok(result);
-            }
-            catch (Exception ex)
+             if (!result)
             {
-                return NotFound(ex.Message); throw;
-
-
+                return NotFound();
             }
-        }
+            return Ok();
+            }
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
                 return BadRequest();
 
-            try
-            {
                 var Delete = await _Command.DeleteAsync(id);
-                return Ok(Delete);
-            }
-            catch (Exception ex)
+if (!Delete)
             {
-                return NotFound(ex.Message);
-                throw;
+                return NotFound();
             }
+            return Ok();
+          
         }
     }
 }
