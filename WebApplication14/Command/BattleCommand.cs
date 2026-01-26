@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Mapster;
+using MapsterMapper;
+using Microsoft.Extensions.Caching.Memory;
 using System.Runtime.InteropServices;
 using WebApplication14.DTOS.Reques;
 using WebApplication14.DTOS.Response;
@@ -23,17 +25,7 @@ namespace WebApplication14.Command
         }
         public async Task<Battlereponse> CrearAsync(CreateBattleRequest dto)
         {
-            var battle = new Battle
-            {
-                AmountAttackerSoldiers = dto.AmountAttackerSoldiers,
-                AmountDefenderSoldiers = dto.AmountDefenderSoldiers,
-                AttackerWon = dto.AttackerWon,
-                HasMayorCapture = dto.HasMayorCapture,
-                HasMayorDeath = dto.HasMayorDeath,
-                Name = dto.Name,
-                Notes = dto.Notes,
-                Year = dto.Year,
-            };
+            var battle = dto.Adapt<Battle>();
             await _Repo.Create(battle);
             await _Repo.Save();
             _cache.Remove($"{CachePrefix}all");
@@ -63,14 +55,7 @@ namespace WebApplication14.Command
             {
                 return false;
             }
-            battle.AmountAttackerSoldiers = dto.AmountAttackerSoldiers;
-            battle.HasMayorCapture = dto.HasMayorCapture;
-             battle.Year = dto.Year;
-            battle.Name = dto.Name;
-             battle.HasMayorDeath = dto.HasMayorDeath;
-            battle.AmountAttackerSoldiers = dto.AmountAttackerSoldiers;
-            battle.AmountDefenderSoldiers = dto.AmountDefenderSoldiers;
-            battle.AttackerWon = dto.AttackerWon;
+            battle = dto.Adapt<Battle>();
             await _Repo.Update(battle);
             await _Repo.Save();
             _cache.Remove($"{CachePrefix}all");

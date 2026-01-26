@@ -72,7 +72,7 @@ namespace WebApplication14.Controllers
         }
         [HttpGet("OrdenarAsc")]
 
-        public async Task<ActionResult<List<Battlereponse>>> OrdenarAsc(PaginationRequest pagination)
+        public async Task<ActionResult<List<Battlereponse>>> OrdenarAsc([FromQuery]PaginationRequest pagination)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace WebApplication14.Controllers
             }
         }
         [HttpGet("OrdenarDesc")]
-        public async Task<ActionResult<List<Battlereponse>>> OrdenarDesc(PaginationRequest pagination)
+        public async Task<ActionResult<List<Battlereponse>>> OrdenarDesc([FromQuery]PaginationRequest pagination)
         {
             try
             {
