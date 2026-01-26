@@ -16,6 +16,7 @@ namespace WebApplication14.Repository
         {
             return await _dbcontext.Battles
                 .AsNoTracking()
+                .OrderBy(x => x.Id)
                 .Skip((pagination.PageNumber - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync();
@@ -28,6 +29,7 @@ namespace WebApplication14.Repository
         {
             return await _dbcontext.Battles.Where(c => c.Name.Contains(nombre))
                 .AsNoTracking()
+                .OrderBy (x => x.Id)
                 .Skip((pagination.PageNumber - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync();
@@ -40,6 +42,7 @@ namespace WebApplication14.Repository
         {
             return await _dbcontext.Battles.OrderBy(c => c.Id)
                 .AsNoTracking()
+               .OrderBy(x => x.Id)
                 .Skip((pagination.PageNumber - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync();
@@ -48,6 +51,7 @@ namespace WebApplication14.Repository
         {
             return await _dbcontext.Battles.OrderByDescending(c => c.Id)
                 .AsNoTracking()
+                .OrderBy(x => x.Id)
                 .Skip((pagination.PageNumber - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync();
